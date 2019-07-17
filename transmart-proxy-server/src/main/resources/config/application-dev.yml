@@ -1,0 +1,8 @@
+
+keycloak:
+  auth-server-url: https://keycloak-dwh-test.thehyve.net/auth
+  realm: transmart-dev
+  resource: transmart-client
+
+transmart-client:
+  transmart-server-url: https://transmart-dev.thehyve.net
