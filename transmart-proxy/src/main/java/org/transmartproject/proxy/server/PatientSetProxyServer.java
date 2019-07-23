@@ -53,7 +53,7 @@ public class PatientSetProxyServer implements PatientSetResource {
             name, CurrentUser.getLogin(), reuse, constraint);
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(this.patientSetClientService.createPatientSet(name, constraint, reuse));
+            .body(this.patientSetClientService.createPatientSet(name, reuse, constraint));
     }
 
 }
