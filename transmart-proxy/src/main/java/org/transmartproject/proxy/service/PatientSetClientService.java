@@ -30,7 +30,7 @@ public class PatientSetClientService {
         return ResponseEntityHelper.unwrap(response);
     }
 
-    public PatientSetResult createPatientSet(@NotBlank String name, @Valid @NotNull Constraint constraint, Boolean reuse) {
+    public PatientSetResult createPatientSet(@NotBlank String name, Boolean reuse, @Valid @NotNull Constraint constraint) {
         ResponseEntity<PatientSetResult> response = patientSetClient.createPatientSet(name, reuse, constraint);
         return ResponseEntityHelper.unwrap(response);
     }
