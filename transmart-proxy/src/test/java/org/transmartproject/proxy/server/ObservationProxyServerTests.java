@@ -45,10 +45,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class ObservationProxyServerTests {
 
-    @MockBean private ObservationClient observationClient;
 
-    @Autowired
-    private MockMvc mvc;
+    private @MockBean ObservationClient observationClient;
+
+    private @Autowired MockMvc mvc;
+
+    private @Autowired ObjectMapper objectMapper;
 
     private void setupMockData() throws JsonProcessingException {
         Constraint relationConstraint = RelationConstraint.builder()
@@ -76,7 +78,7 @@ public class ObservationProxyServerTests {
             ))
             .dimensionElements(dimensionElements)
             .build();
-        byte[] serialisedHypercube = new ObjectMapper().writeValueAsBytes(hypercube);
+        byte[] serialisedHypercube = objectMapper.writeValueAsString(hypercube).getBytes();
         InputStream stream = new ByteArrayInputStream(serialisedHypercube);
 
         doAnswer(invocation -> {
@@ -99,7 +101,8 @@ public class ObservationProxyServerTests {
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andDo(result -> {
-                Hypercube hypercube = new ObjectMapper().readValue(result.getResponse().getContentAsByteArray(), Hypercube.class);
+                byte[] bytes = result.getResponse().getContentAsByteArray();
+                Hypercube hypercube = objectMapper.readValue(bytes, Hypercube.class);
                 Assert.assertEquals("patient", hypercube.getDimensionDeclarations().get(0).getName());
                 Assert.assertThat(hypercube.getCells().get(1).getNumericValue(), closeTo(new BigDecimal(100), new BigDecimal(0.001)));
             });

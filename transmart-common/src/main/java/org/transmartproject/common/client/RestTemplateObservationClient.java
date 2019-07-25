@@ -16,10 +16,14 @@ public class RestTemplateObservationClient implements ObservationClient {
 
     private RestTemplateBuilder restTemplateBuilder;
     private TransmartClientProperties transmartClientProperties;
+    private ObjectMapper objectMapper;
 
-    RestTemplateObservationClient(RestTemplateBuilder restTemplateBuilder, TransmartClientProperties transmartClientProperties) {
+    RestTemplateObservationClient(RestTemplateBuilder restTemplateBuilder,
+                                  TransmartClientProperties transmartClientProperties,
+                                  ObjectMapper objectMapper) {
         this.restTemplateBuilder = restTemplateBuilder;
         this.transmartClientProperties = transmartClientProperties;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -27,7 +31,7 @@ public class RestTemplateObservationClient implements ObservationClient {
         restTemplateBuilder.build().execute(
             String.format("%s/v2/observations", transmartClientProperties.getTransmartServerUrl()),
             HttpMethod.POST,
-            request -> new ObjectMapper().writeValue(request.getBody(), query),
+            request -> objectMapper.writeValue(request.getBody(), query),
             response -> { reader.accept(response.getBody()); return null; }
         );
     }
