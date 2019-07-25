@@ -1,11 +1,11 @@
 package org.transmartproject.proxy.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.transmartproject.common.client.ObservationClient;
-import org.transmartproject.common.dto.Hypercube;
 import org.transmartproject.common.dto.Query;
-import org.transmartproject.common.constraint.Constraint;
+
+import java.io.InputStream;
+import java.util.function.Consumer;
 
 @Service
 public class ObservationClientService {
@@ -16,9 +16,8 @@ public class ObservationClientService {
         this.observationClient = observationClient;
     }
 
-    public Hypercube fetchObservations(Query query) {
-        ResponseEntity<Hypercube> response = observationClient.query(query);
-        return ResponseEntityHelper.unwrap(response);
+    public void fetchObservations(Query query, Consumer<InputStream> reader) {
+        observationClient.query(query, reader);
     }
 
 }
