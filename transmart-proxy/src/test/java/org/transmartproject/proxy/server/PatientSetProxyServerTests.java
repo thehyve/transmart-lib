@@ -1,5 +1,6 @@
 package org.transmartproject.proxy.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import org.transmartproject.proxy.TestApplication;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
@@ -41,7 +43,7 @@ public class PatientSetProxyServerTests {
     @Autowired
     private MockMvc mvc;
 
-    private void setupMockData() {
+    private void setupMockData() throws JsonProcessingException {
         Constraint hypertensionConstraint = AndConstraint.builder()
             .args(Arrays.asList(
                 ConceptConstraint.builder().conceptCode("Systolic").build(),
@@ -54,17 +56,17 @@ public class PatientSetProxyServerTests {
                 .name("Males A")
                 .description("Male patients in study A")
                 .setSize(1000L)
-                .requestConstraints(AndConstraint.builder().args(Arrays.asList(
+                .requestConstraints(new ObjectMapper().writeValueAsString(AndConstraint.builder().args(Arrays.asList(
                     StudyNameConstraint.builder().studyId("A").build(),
                     ConceptConstraint.builder().conceptCode("Male").build()
-                )).build())
+                )).build()))
                 .build(),
             PatientSetResult.builder()
                 .id(2L)
                 .name("Hypertension")
                 .description("Patients with blood pressure above threshold")
                 .setSize(3000L)
-                .requestConstraints(hypertensionConstraint)
+                .requestConstraints(new ObjectMapper().writeValueAsString(hypertensionConstraint))
                 .build()
         );
         // return list of patient sets for /v2/patient_sets
@@ -85,7 +87,7 @@ public class PatientSetProxyServerTests {
                 .id(3L)
                 .name("Test set")
                 .setSize(1234L)
-                .requestConstraints(studyConstraint)
+                .requestConstraints(new ObjectMapper().writeValueAsString(studyConstraint))
                 .build()
         );
         doReturn(newPatientSetResponse)
@@ -115,7 +117,7 @@ public class PatientSetProxyServerTests {
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.name", is("Hypertension")))
-            .andExpect(jsonPath("$.requestConstraints.type", is("and")));
+            .andExpect(jsonPath("$.requestConstraints", containsString("\"type\":\"and\"")));
     }
 
     @WithMockUser(username="spring")
@@ -130,7 +132,7 @@ public class PatientSetProxyServerTests {
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.name", is("Test set")))
             .andExpect(jsonPath("$.setSize", is(1234)))
-            .andExpect(jsonPath("$.requestConstraints.type", is("study_name")));
+            .andExpect(jsonPath("$.requestConstraints",  containsString("\"type\":\"study_name\"")));
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class VisitDimensionElement {
     private @NotNull Long encounterNum;
+    private @NotNull Long patientId;
     private String activeStatusCd;
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private ZonedDateTime startDate;

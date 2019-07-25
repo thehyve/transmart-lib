@@ -20,7 +20,7 @@ public class StudyTests {
 
     @Test
     public void testStudyBuilder() {
-        Study expected = new Study(300L, "EHR", null, null, null);
+        Study expected = new Study(300L, "EHR", null, null, null, null);
         Assert.assertEquals(expected, Study.builder().id(300L).studyId("EHR").build());
     }
 

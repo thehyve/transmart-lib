@@ -239,4 +239,38 @@ public class ConstraintValidationTests {
         // then: 'An exception is thrown'
     }
 
+    @Test
+    public void testOperatorSupportedInTemporalConstraint() {
+        // when: 'creating a temporal constraint with (valid) exists operator'
+        TemporalConstraint constraint = TemporalConstraint.builder()
+            .eventConstraint(new TrueConstraint())
+            .operator(Operator.Exists)
+            .build();
+
+        // then: 'the validation rule returns true'
+        Assert.assertTrue(constraint.hasEventOperator());
+
+        // when: 'validating the constraint'
+        validate(constraint);
+
+        // then: 'No exception is thrown'
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testOperatorNotSupportedInTemporalConstraint() {
+        // when: 'creating a temporal constraint with (invalid) equals operator'
+        TemporalConstraint constraint = TemporalConstraint.builder()
+            .eventConstraint(new TrueConstraint())
+            .operator(Operator.Equals)
+            .build();
+
+        // then: 'the validation rule returns false'
+        Assert.assertFalse(constraint.hasEventOperator());
+
+        // when: 'validating the constraint'
+        validate(constraint);
+
+        // then: 'An exception is thrown'
+    }
+
 }

@@ -27,7 +27,7 @@ Proxy server controllers and client services.
 ```xml
 <dependency>
     <groupId>org.transmartproject</groupId>
-    <artifactId>transmart-common</artifactId>
+    <artifactId>transmart-proxy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
