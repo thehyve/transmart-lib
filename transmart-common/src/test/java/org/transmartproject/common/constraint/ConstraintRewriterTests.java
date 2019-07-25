@@ -92,6 +92,18 @@ public class ConstraintRewriterTests {
     }
 
     @Test
+    public void testRewritingOfNonPatientSubselectWithTrueSubconstraint() {
+        // given: "a subselect constraint with non-patient dimension"
+        Constraint constraint = new SubSelectionConstraint("sample", new TrueConstraint());
+
+        // when: "rewriting the constraint"
+        Constraint result = new NormaliseConstraintRewriter().build(constraint);
+
+        // then: "the rewrite result is equal to the original"
+        Assert.assertEquals(constraint, result);
+    }
+
+    @Test
     public void testRewritingOfConjunctionWithSubselectWithTrueSubconstraint() {
         // given: "two logically equivalent constraints, the second form preferred"
         Constraint constraint = new AndConstraint(Arrays.asList(

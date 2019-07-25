@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 public class NormaliseConstraintRewriter extends ConstraintRewriter {
 
     /**
-     * Eliminate subselect true
+     * Eliminate subselect true if the dimension is "patient"
      */
     @Override
     public Constraint build(SubSelectionConstraint constraint) {
         Constraint subconstraint = build(constraint.getConstraint());
-        if (subconstraint instanceof TrueConstraint) {
+        if (constraint.getDimension().equals("patient") && subconstraint instanceof TrueConstraint) {
             return subconstraint;
         } else {
             return new SubSelectionConstraint(constraint.getDimension(), subconstraint);
