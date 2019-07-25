@@ -23,7 +23,7 @@ import org.transmartproject.proxy.security.CurrentUser;
 @ComponentScan(basePackages = "org.transmartproject.common.client")
 public class FeignConfiguration extends WebMvcConfigurationSupport {
 
-    private @Autowired @Qualifier("taskExecutor") AsyncTaskExecutor asyncTaskExecutor;
+    private @Autowired @Qualifier("taskScheduler") AsyncTaskExecutor asyncTaskExecutor;
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
