@@ -65,5 +65,5 @@ public class PatientSetResult {
      * The constraint that was executed, if the patient set was created using
      * the v2 API.
      */
-    private Constraint requestConstraints;
+    private String requestConstraints;
 }
