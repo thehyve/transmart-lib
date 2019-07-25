@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Study {
@@ -15,4 +16,5 @@ public class Study {
     private Long bioExperimentId;
     private String secureObjectToken;
     private List<String> dimensions;
+    private Map<String, Object> metadata;
 }
