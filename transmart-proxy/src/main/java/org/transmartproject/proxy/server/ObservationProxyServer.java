@@ -17,8 +17,6 @@ import org.transmartproject.common.resource.ObservationServer;
 import org.transmartproject.proxy.security.CurrentUser;
 import org.transmartproject.proxy.service.ObservationClientService;
 
-import java.io.IOException;
-
 /**
  * Proxy server for observations.
  */
@@ -44,9 +42,11 @@ public class ObservationProxyServer implements ObservationServer {
         StreamingResponseBody stream = output -> observationClientService.fetchObservations(query,
             input -> {
                 try {
-                    Streams.copy(input, output, false);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    long byteCount = Streams.copy(input, output, false);
+                    log.debug("{} bytes copied", byteCount);
+                    output.flush();
+                } catch (Exception e) {
+                    log.error("Error reading observations", e);
                     throw new ServiceNotAvailable("Error reading observations", e);
                 }
             });

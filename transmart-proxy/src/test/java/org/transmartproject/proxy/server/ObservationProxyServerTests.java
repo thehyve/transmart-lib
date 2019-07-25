@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class ObservationProxyServerTests {
 
+    private Logger log = LoggerFactory.getLogger(ObservationProxyServerTests.class);
 
     private @MockBean ObservationClient observationClient;
 
@@ -79,11 +82,17 @@ public class ObservationProxyServerTests {
             .dimensionElements(dimensionElements)
             .build();
         byte[] serialisedHypercube = objectMapper.writeValueAsString(hypercube).getBytes();
+        log.debug("Stream should have {} bytes", serialisedHypercube.length);
         InputStream stream = new ByteArrayInputStream(serialisedHypercube);
 
         doAnswer(invocation -> {
             Consumer<InputStream> reader = invocation.getArgument(1);
-            reader.accept(stream);
+            log.debug("Start streaming mock data to observation client");
+            try {
+                reader.accept(stream);
+            } catch(Exception e) {
+                log.error("Error reading observations", e);
+            }
             return null;
         })
         .when(observationClient).query(eq(Query.builder().type("clinical").constraint(relationConstraint).build()), any());
@@ -101,7 +110,10 @@ public class ObservationProxyServerTests {
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andDo(result -> {
+                // Wait until data has been written
+                Thread.sleep(100);
                 byte[] bytes = result.getResponse().getContentAsByteArray();
+                log.debug("Response has {} bytes", bytes.length);
                 Hypercube hypercube = objectMapper.readValue(bytes, Hypercube.class);
                 Assert.assertEquals("patient", hypercube.getDimensionDeclarations().get(0).getName());
                 Assert.assertThat(hypercube.getCells().get(1).getNumericValue(), closeTo(new BigDecimal(100), new BigDecimal(0.001)));

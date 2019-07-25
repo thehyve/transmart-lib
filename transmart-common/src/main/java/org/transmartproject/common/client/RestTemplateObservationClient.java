@@ -1,6 +1,8 @@
 package org.transmartproject.common.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,8 @@ import java.util.function.Consumer;
 
 @Component
 public class RestTemplateObservationClient implements ObservationClient {
+
+    private Logger log = LoggerFactory.getLogger(RestTemplateObservationClient.class);
 
     private RestTemplateBuilder restTemplateBuilder;
     private TransmartClientProperties transmartClientProperties;
@@ -32,7 +36,14 @@ public class RestTemplateObservationClient implements ObservationClient {
             String.format("%s/v2/observations", transmartClientProperties.getTransmartServerUrl()),
             HttpMethod.POST,
             request -> objectMapper.writeValue(request.getBody(), query),
-            response -> { reader.accept(response.getBody()); return null; }
+            response -> {
+                try {
+                    reader.accept(response.getBody());
+                } catch(Exception e) {
+                    log.error("Error reading observations", e);
+                }
+                return null;
+            }
         );
     }
 
