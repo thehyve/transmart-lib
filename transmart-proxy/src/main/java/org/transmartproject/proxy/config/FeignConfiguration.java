@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.transmartproject.proxy.security.CurrentUser;
@@ -34,6 +35,15 @@ public class FeignConfiguration extends WebMvcConfigurationSupport {
             requestTemplate.header("Authorization", "Bearer " + CurrentUser.getAccessToken());
             requestTemplate.header("Accept", ContentType.APPLICATION_JSON.getMimeType());
         };
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+            .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
 }
