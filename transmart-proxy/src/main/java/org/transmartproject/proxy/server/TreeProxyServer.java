@@ -1,5 +1,7 @@
 package org.transmartproject.proxy.server;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.transmartproject.proxy.service.TreeClientService;
 @RestController
 @Validated
 @CrossOrigin
+@Api(value="tree", description="Ontology tree nodes")
 public class TreeProxyServer implements TreeResource {
 
     private Logger log = LoggerFactory.getLogger(TreeProxyServer.class);
@@ -34,6 +37,7 @@ public class TreeProxyServer implements TreeResource {
 
 
     @Override
+    @ApiOperation(value = "Fetch ontology", produces = "application/json")
     public ResponseEntity<Forest> getForest(
         String root, Integer depth, Boolean constraints, Boolean counts, Boolean tags) {
         log.info("Fetch ontology for user {}", CurrentUser.getLogin());

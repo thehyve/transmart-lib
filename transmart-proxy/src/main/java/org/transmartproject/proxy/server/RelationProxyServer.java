@@ -1,5 +1,7 @@
 package org.transmartproject.proxy.server;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import org.transmartproject.proxy.service.RelationClientService;
 @RestController
 @Validated
 @CrossOrigin
+@Api(value="relations", description="Relations")
 public class RelationProxyServer implements RelationResource {
 
     private Logger log = LoggerFactory.getLogger(RelationProxyServer.class);
@@ -33,6 +36,7 @@ public class RelationProxyServer implements RelationResource {
     }
 
     @Override
+    @ApiOperation(value = "List all relations", produces = "application/json")
     public ResponseEntity<RelationList> listRelations() {
         log.info("List all relations for user {}", CurrentUser.getLogin());
         return ResponseEntity.ok(this.relationClientService.fetchRelations());
