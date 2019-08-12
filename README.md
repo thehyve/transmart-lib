@@ -7,6 +7,7 @@
 
 ## Overview
 
+The packages in the TranSMART API library depend on Java 11.
 This repository contains the following packages:
 
 ### transmart-common
