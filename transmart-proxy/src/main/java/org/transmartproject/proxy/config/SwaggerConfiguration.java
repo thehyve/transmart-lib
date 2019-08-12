@@ -18,8 +18,6 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
-    private static final String VERSION = "v0.0.1";
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -36,7 +34,7 @@ public class SwaggerConfiguration {
         return new ApiInfo(
             "TranSMART REST API proxy",
             "Spring Boot application that serves as a TranSMART REST API proxy.",
-            VERSION,
+            getClass().getPackage().getImplementationVersion(),
             null,
             new Contact("The Hyve", "https://github.com/thehyve/transmart-lib", "office@thehyve.nl"),
             "MIT License", "https://opensource.org/licenses/MIT", Collections.emptyList());
