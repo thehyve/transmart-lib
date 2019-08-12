@@ -51,7 +51,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/error").permitAll()
-                .antMatchers("/css/**", "/images/**", "/scripts/**", "/swagger.yaml").permitAll()
+                .antMatchers("/swagger-ui.html/**", "/configuration/**", "/swagger-resources/**",
+                    "/v2/api-docs", "/webjars/springfox-swagger-ui/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();

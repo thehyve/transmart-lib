@@ -1,5 +1,7 @@
 package org.transmartproject.proxy.server;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.transmartproject.proxy.service.RelationTypeClientService;
 @RestController
 @Validated
 @CrossOrigin
+@Api(value="relationTypes", description="Relation types")
 public class RelationTypeProxyServer implements RelationTypeResource {
 
     private Logger log = LoggerFactory.getLogger(RelationTypeProxyServer.class);
@@ -29,6 +32,7 @@ public class RelationTypeProxyServer implements RelationTypeResource {
     }
 
     @Override
+    @ApiOperation(value = "List all relation types", produces = "application/json")
     public ResponseEntity<RelationTypeList> listRelationTypes() {
         log.info("List all relation types for user {}", CurrentUser.getLogin());
         return ResponseEntity.ok(this.relationTypeClientService.fetchRelationTypes());

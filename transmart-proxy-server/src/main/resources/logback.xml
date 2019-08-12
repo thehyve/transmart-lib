@@ -10,6 +10,7 @@
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.eclipse.jetty" level="WARN"/>
     <logger name="com.netflix.config" level="ERROR"/>
+    <logger name="springfox.documentation.spring.web" level="WARN"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

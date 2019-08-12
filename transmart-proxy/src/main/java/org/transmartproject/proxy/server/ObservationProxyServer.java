@@ -1,5 +1,7 @@
 package org.transmartproject.proxy.server;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.transmartproject.proxy.service.ObservationClientService;
 @RestController
 @Validated
 @CrossOrigin
+@Api(value="observations", description="Observations")
 public class ObservationProxyServer implements ObservationResource {
 
     private Logger log = LoggerFactory.getLogger(ObservationProxyServer.class);
@@ -31,6 +34,7 @@ public class ObservationProxyServer implements ObservationResource {
     }
 
     @Override
+    @ApiOperation(value = "List all observations matching the constraint", produces = "application/json")
     public ResponseEntity<Hypercube> query(Query query) {
         log.info("Query for user {}. Query: {}", CurrentUser.getLogin(), query);
         return ResponseEntity.ok(observationClientService.fetchObservations(query));

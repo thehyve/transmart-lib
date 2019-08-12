@@ -1,5 +1,7 @@
 package org.transmartproject.proxy.server;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import javax.validation.constraints.NotBlank;
 @RestController
 @Validated
 @CrossOrigin
+@Api(value="patientSets", description="Patient sets")
 public class PatientSetProxyServer implements PatientSetResource {
 
     private Logger log = LoggerFactory.getLogger(PatientSetProxyServer.class);
@@ -35,18 +38,21 @@ public class PatientSetProxyServer implements PatientSetResource {
     }
 
     @Override
+    @ApiOperation(value = "List all patient sets", produces = "application/json")
     public ResponseEntity<PatientSetList> listPatientSets() {
         log.info("List all patient sets for user {}", CurrentUser.getLogin());
         return ResponseEntity.ok(this.patientSetClientService.fetchPatientSets());
     }
 
     @Override
+    @ApiOperation(value = "Get patient set by id", produces = "application/json")
     public ResponseEntity<PatientSetResult> getPatientSet(Long id) {
         log.info("Get patient set with id {} for user {}", id, CurrentUser.getLogin());
         return ResponseEntity.ok(this.patientSetClientService.fetchPatientSet(id));
     }
 
     @Override
+    @ApiOperation(value = "Create patient set", produces = "application/json")
     public ResponseEntity<PatientSetResult> createPatientSet(
         @NotBlank String name, Boolean reuse, @Valid Constraint constraint) {
         log.info("Create patient set with name {} for user {}. Reuse: {}. Constraint: {}",

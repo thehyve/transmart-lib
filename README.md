@@ -7,6 +7,7 @@
 
 ## Overview
 
+The packages in the TranSMART API library depend on Java 11.
 This repository contains the following packages:
 
 ### transmart-common
@@ -68,7 +69,10 @@ java -jar transmart-proxy-server/target/transmart-proxy-server-<version>.jar
 
 There should now be an application running at [http://localhost:9050/](http://localhost:9050/).
 
+#### Use
 
+There is a [Swagger documentation](https://swagger.io/solutions/api-documentation/) describing how to use the transmart-proxy API.
+It is exposed at the application URL, by default: [http://localhost:9050/](http://localhost:9050/).
 
 ## Development
 
