@@ -38,10 +38,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class PatientSetProxyServerTests {
 
-    @MockBean private PatientSetClient patientSetClient;
+    private @MockBean PatientSetClient patientSetClient;
 
-    @Autowired
-    private MockMvc mvc;
+    private @Autowired MockMvc mvc;
+
+    private @Autowired ObjectMapper objectMapper;
 
     private void setupMockData() throws JsonProcessingException {
         Constraint hypertensionConstraint = AndConstraint.builder()
@@ -56,7 +57,7 @@ public class PatientSetProxyServerTests {
                 .name("Males A")
                 .description("Male patients in study A")
                 .setSize(1000L)
-                .requestConstraints(new ObjectMapper().writeValueAsString(AndConstraint.builder().args(Arrays.asList(
+                .requestConstraints(objectMapper.writeValueAsString(AndConstraint.builder().args(Arrays.asList(
                     StudyNameConstraint.builder().studyId("A").build(),
                     ConceptConstraint.builder().conceptCode("Male").build()
                 )).build()))
@@ -66,7 +67,7 @@ public class PatientSetProxyServerTests {
                 .name("Hypertension")
                 .description("Patients with blood pressure above threshold")
                 .setSize(3000L)
-                .requestConstraints(new ObjectMapper().writeValueAsString(hypertensionConstraint))
+                .requestConstraints(objectMapper.writeValueAsString(hypertensionConstraint))
                 .build()
         );
         // return list of patient sets for /v2/patient_sets
@@ -87,7 +88,7 @@ public class PatientSetProxyServerTests {
                 .id(3L)
                 .name("Test set")
                 .setSize(1234L)
-                .requestConstraints(new ObjectMapper().writeValueAsString(studyConstraint))
+                .requestConstraints(objectMapper.writeValueAsString(studyConstraint))
                 .build()
         );
         doReturn(newPatientSetResponse)
@@ -125,7 +126,7 @@ public class PatientSetProxyServerTests {
     public void givenAvailableClient_whenCreatePatientSet_thenStatus201() throws Exception {
         setupMockData();
         mvc.perform(post("/v2/patient_sets?name=Test set&reuse=true")
-            .content(new ObjectMapper().writeValueAsString(
+            .content(objectMapper.writeValueAsString(
                 StudyNameConstraint.builder().studyId("EHR").build()))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())

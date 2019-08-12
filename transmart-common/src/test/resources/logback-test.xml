@@ -5,7 +5,7 @@
 
     <logger name="org.hibernate.validator" level="WARN"/>
 
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="CONSOLE"/>
     </root>
 
