@@ -3,10 +3,66 @@ package org.transmartproject.common.constraint;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.transmartproject.common.type.DataType;
+import org.transmartproject.common.type.Operator;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class ConstraintRewriterTests {
+
+    private Field createTestField() {
+        return Field.builder()
+            .dimension("visit")
+            .fieldName("inout_cd")
+            .type(DataType.String)
+            .build();
+    }
+
+    private Field createTestTimeField() {
+        return Field.builder()
+            .dimension("visit")
+            .fieldName("end_date")
+            .type(DataType.Date)
+            .build();
+    }
+
+    private List<? extends Constraint> testConstraints = Arrays.asList(
+        new TrueConstraint(),
+        Negation.builder().arg(new TrueConstraint()).build(),
+        AndConstraint.builder().args(Collections.singletonList(new TrueConstraint())).build(),
+        OrConstraint.builder().args(Collections.singletonList(new TrueConstraint())).build(),
+        SubSelectionConstraint.builder().dimension("patient").constraint(new TrueConstraint()).build(),
+        NullConstraint.builder().field(createTestField()).build(),
+        BiomarkerConstraint.builder().biomarkerType("variant").build(),
+        ModifierConstraint.builder().dimensionName("sample").build(),
+        FieldConstraint.builder().field(createTestField()).value("x").build(),
+        ValueConstraint.builder().operator(Operator.Equals).valueType(DataType.Numeric).value(5).build(),
+        TimeConstraint.builder().field(createTestTimeField()).operator(Operator.After).values(Arrays.asList(new Date())).build(),
+        PatientSetConstraint.builder().patientSetId(1234L).build(),
+        TemporalConstraint.builder().operator(Operator.Before).eventConstraint(new TrueConstraint()).build(),
+        ConceptConstraint.builder().conceptCodes(Arrays.asList("test1", "test2")).build(),
+        StudyNameConstraint.builder().studyId("Study A").build(),
+        RelationConstraint.builder().relationTypeLabel("parent").relatedSubjectsConstraint(new TrueConstraint()).build()
+    );
+
+    @Test
+    public void testConstraintRewriter() {
+        ConstraintRewriter rewriter = new ConstraintRewriter();
+        for (Constraint constraint: testConstraints) {
+            Assert.assertNotNull(rewriter.build(constraint));
+        }
+    }
+
+    @Test
+    public void testNormaliseConstraintRewriter() {
+        ConstraintRewriter rewriter = new NormaliseConstraintRewriter();
+        for (Constraint constraint: testConstraints) {
+            Assert.assertNotNull(rewriter.build(constraint));
+        }
+    }
 
     @Test
     public void testEliminateDoubleNegation() {
