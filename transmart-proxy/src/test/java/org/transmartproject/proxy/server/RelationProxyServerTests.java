@@ -73,7 +73,7 @@ public class RelationProxyServerTests {
     @Test
     public void givenAvailableClient_whenGetRelations_thenStatus200() throws Exception {
         setupMockData();
-        mvc.perform(get("/v2/relations")
+        mvc.perform(get("/v2/pedigree/relations")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

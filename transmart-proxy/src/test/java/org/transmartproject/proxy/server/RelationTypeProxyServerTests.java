@@ -60,7 +60,7 @@ public class RelationTypeProxyServerTests {
     @Test
     public void givenAvailableClient_whenGetRelationTypes_thenStatus200() throws Exception {
         setupMockData();
-        mvc.perform(get("/v2/relation_types")
+        mvc.perform(get("/v2/pedigree/relation_types")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

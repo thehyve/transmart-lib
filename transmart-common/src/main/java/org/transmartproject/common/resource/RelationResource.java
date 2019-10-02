@@ -10,11 +10,11 @@ import org.transmartproject.common.dto.RelationList;
  * Specifies the endpoint URLs and data types for
  * relation clients and servers.
  */
-@RequestMapping("/v2/relations")
+@RequestMapping("/v2/pedigree/relations")
 public interface RelationResource {
 
     /**
-     * GET  /v2/relations
+     * GET  /v2/pedigree/relations
      *
      * List all relations.
      *
