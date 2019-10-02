@@ -15,7 +15,7 @@ public enum ValueType {
 
     @JsonValue
     String getName() {
-        return this.name().toUpperCase();
+        return this.name();
     }
 
     private static final Map<String, ValueType> mapping = new HashMap<>();

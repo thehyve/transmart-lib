@@ -12,7 +12,7 @@ public enum DimensionType {
 
     @JsonValue
     String getName() {
-        return this.name().toUpperCase();
+        return this.name().toLowerCase();
     }
 
     private static final Map<String, DimensionType> mapping = new HashMap<>();
