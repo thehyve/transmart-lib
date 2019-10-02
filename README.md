@@ -8,6 +8,18 @@
 ## Overview
 
 The packages in the TranSMART API library depend on Java 11.
+To add the Nexus repository where the packages are published, add the following
+to your Maven configuration: 
+```xml
+<repositories>
+    <repository>
+        <id>nl.thehyve.nexus.releases</id>
+        <name>The Hyve - Nexus releases repository</name>
+        <url>https://repo.thehyve.nl/content/repositories/releases/</url>
+    </repository>
+</repositories>
+```
+
 This repository contains the following packages:
 
 ### transmart-common
