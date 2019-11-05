@@ -5,6 +5,7 @@
 
 # TranSMART API library
 
+
 ## Overview
 
 The packages in the TranSMART API library depend on Java 11.
@@ -86,6 +87,7 @@ There should now be an application running at [http://localhost:9050/](http://lo
 There is a [Swagger documentation](https://swagger.io/solutions/api-documentation/) describing how to use the transmart-proxy API.
 It is exposed at the application URL, by default: [http://localhost:9050/](http://localhost:9050/).
 
+
 ## Development
 
 ### Run in development mode
@@ -109,6 +111,11 @@ Run all tests:
 mvn test
 ```
 
+
+## Acknowledgement
+
+This project was funded by the German Ministry of Education and Research (BMBF) as part of the project
+DIFUTURE - Data Integration for Future Medicine within the German Medical Informatics Initiative (grant no. 01ZZ1804D).
 
 
 ## License
