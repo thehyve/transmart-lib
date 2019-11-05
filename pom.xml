@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.transmartproject</groupId>
 	<artifactId>transmart-lib</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<name>transmart-lib</name>
 	<description>TranSMART API library</description>
 	<packaging>pom</packaging>
