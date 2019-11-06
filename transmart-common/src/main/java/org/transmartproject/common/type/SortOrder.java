@@ -25,6 +25,9 @@ public enum SortOrder {
 
     @JsonCreator
     public static SortOrder forName(String name) {
+        if (name == null) {
+            return None;
+        }
         name = name.toLowerCase();
         return mapping.getOrDefault(name, None);
     }

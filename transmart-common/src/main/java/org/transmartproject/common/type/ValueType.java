@@ -27,6 +27,9 @@ public enum ValueType {
 
     @JsonCreator
     public static ValueType forName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Value type not specified");
+        }
         name = name.toLowerCase();
         if (mapping.containsKey(name)) {
             return mapping.get(name);

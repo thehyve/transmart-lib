@@ -27,6 +27,9 @@ public enum QueryStatus {
 
     @JsonCreator
     public static QueryStatus forName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Query status not specified");
+        }
         name = name.toLowerCase();
         if (mapping.containsKey(name)) {
             return mapping.get(name);

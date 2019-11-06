@@ -32,6 +32,9 @@ public enum TreeNodeType {
 
     @JsonCreator
     public static TreeNodeType forName(String name) {
+        if (name == null) {
+            return Unknown;
+        }
         name = name.toLowerCase();
         return mapping.getOrDefault(name, Unknown);
     }

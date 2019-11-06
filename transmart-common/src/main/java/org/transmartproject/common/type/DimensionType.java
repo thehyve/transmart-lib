@@ -24,6 +24,9 @@ public enum DimensionType {
 
     @JsonCreator
     public static DimensionType forName(String name) {
+        if (name == null) {
+            return Attribute;
+        }
         name = name.toLowerCase();
         return mapping.getOrDefault(name, Attribute);
     }

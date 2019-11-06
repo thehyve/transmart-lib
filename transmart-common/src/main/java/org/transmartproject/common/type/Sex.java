@@ -25,6 +25,9 @@ public enum Sex {
 
     @JsonCreator
     public static Sex forName(String name) {
+        if (name == null) {
+            return Unknown;
+        }
         name = name.toLowerCase();
         return mapping.getOrDefault(name, Unknown);
     }

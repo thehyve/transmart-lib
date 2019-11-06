@@ -111,6 +111,9 @@ public enum VisualAttribute {
 
     @JsonCreator
     public static VisualAttribute forName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Visual attribute not specified");
+        }
         name = name.toLowerCase();
         if (mapping.containsKey(name)) {
             return mapping.get(name);
