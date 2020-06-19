@@ -9,13 +9,13 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.format.support.FormattingConversionService;
+import org.springframework.web.accept.ContentNegotiationManager;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.transmartproject.proxy.security.CurrentUser;
 
 @Configuration
@@ -32,14 +32,23 @@ public class FeignConfiguration extends WebMvcConfigurationSupport {
 
     @Bean
     @Override
-    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-        return new FeignFilterRequestMappingHandlerMapping();
+    public RequestMappingHandlerMapping requestMappingHandlerMapping(
+        @Qualifier("mvcContentNegotiationManager") ContentNegotiationManager contentNegotiationManager,
+        @Qualifier("mvcConversionService") FormattingConversionService conversionService,
+        @Qualifier("mvcResourceUrlProvider") ResourceUrlProvider resourceUrlProvider) {
+        RequestMappingHandlerMapping mapping = new FeignFilterRequestMappingHandlerMapping();
+        mapping.setOrder(0);
+        mapping.setInterceptors(getInterceptors(conversionService, resourceUrlProvider));
+        mapping.setContentNegotiationManager(contentNegotiationManager);
+        mapping.setCorsConfigurations(getCorsConfigurations());
+
+        return mapping;
     }
 
     private static class FeignFilterRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
         @Override
         protected boolean isHandler(Class<?> beanType) {
-            return super.isHandler(beanType) && (AnnotationUtils.findAnnotation(beanType, FeignClient.class) == null);
+            return super.isHandler(beanType) && !AnnotatedElementUtils.hasAnnotation(beanType, FeignClient.class);
         }
     }
 
