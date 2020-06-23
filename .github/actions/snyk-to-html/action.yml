@@ -1,0 +1,21 @@
+name: "Snyk-to-html Maven (3-jdk-11)"
+description: "Convert your Snyk report from JSON to HTML"
+author: "Artur Faizullin"
+branding:
+  icon: "alert-triangle"
+  color: "yellow"
+inputs:
+  args:
+    description: "Additional arguments to pass to Snyk to html converter"
+  input_file:
+    description: "A file name to convert from"
+  output_file:
+    description: "A file name to convert to"
+runs:
+  using: "docker"
+  image: "docker://snyk/snyk:maven-3-jdk-11"
+  args:
+  - snyk-to-html
+  - "-i ${{ inputs.input_file }}"
+  - "-o ${{ inputs.output_file }}"
+  - ${{ inputs.args }} 

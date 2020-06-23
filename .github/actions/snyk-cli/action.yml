@@ -1,0 +1,19 @@
+name: "Snyk CLI Maven (3-jdk-11)"
+description: "Check your Maven application for vulnerabilties using Snyk"
+author: "Artur Faizullin"
+branding:
+  icon: "alert-triangle"
+  color: "yellow"
+inputs:
+  command:
+    description: "Which Snyk command to run, defaults to test"
+    default: test
+  args:
+    description: "Additional arguments to pass to Snyk"
+runs:
+  using: "docker"
+  image: "docker://snyk/snyk-cli:1.347.1.maven-3.6.3_java11"
+  entrypoint: '/home/node/docker-entrypoint.sh'
+  args:
+  - ${{ inputs.command }}
+  - ${{ inputs.args }} 

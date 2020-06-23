@@ -1,0 +1,27 @@
+name: Workflow for Maven using Snyk 
+on: push
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/maven-3-jdk-11@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: test
+        args: --json-file-output=test.json
+    - run: ls -la
+      if: ${{ always() }}
+  custom:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Run Snyk CLI to check for vulnerabilities
+      uses: ./.github/actions/snyk-cli
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        MONITOR: ${{ true }}
+    - run: ls -la
+      if: ${{ always() }}
