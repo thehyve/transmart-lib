@@ -2,6 +2,7 @@ package org.transmartproject.proxy.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,18 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.transmartproject.common.client.ObservationClient;
 import org.transmartproject.common.dto.*;
 import org.transmartproject.common.constraint.*;
-import org.transmartproject.common.type.DataType;
-import org.transmartproject.common.type.DimensionType;
-import org.transmartproject.common.type.Operator;
+import org.transmartproject.common.type.*;
 import org.transmartproject.proxy.TestApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static org.hamcrest.Matchers.closeTo;
@@ -47,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class ObservationProxyServerTests {
 
-    private Logger log = LoggerFactory.getLogger(ObservationProxyServerTests.class);
+    private final Logger log = LoggerFactory.getLogger(ObservationProxyServerTests.class);
 
     private @MockBean ObservationClient observationClient;
 
@@ -116,7 +112,7 @@ public class ObservationProxyServerTests {
                 log.debug("Response has {} bytes", bytes.length);
                 Hypercube hypercube = objectMapper.readValue(bytes, Hypercube.class);
                 Assert.assertEquals("patient", hypercube.getDimensionDeclarations().get(0).getName());
-                Assert.assertThat(hypercube.getCells().get(1).getNumericValue(), closeTo(new BigDecimal(100), new BigDecimal(0.001)));
+                MatcherAssert.assertThat(hypercube.getCells().get(1).getNumericValue(), closeTo(new BigDecimal(100), new BigDecimal(0.001)));
             });
     }
 
