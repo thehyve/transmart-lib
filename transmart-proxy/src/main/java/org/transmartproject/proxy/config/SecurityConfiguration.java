@@ -1,13 +1,15 @@
 package org.transmartproject.proxy.config;
 
+import org.keycloak.adapters.KeycloakConfigResolver;
+import org.keycloak.adapters.KeycloakDeployment;
+import org.keycloak.adapters.KeycloakDeploymentBuilder;
+import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.representations.adapters.config.AdapterConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -36,9 +38,25 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
         return new NullAuthenticatedSessionStrategy();
     }
 
-    @Bean
-    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
+    @Primary @Configuration
+    static
+    class CustomKeycloakSpringBootConfigResolver implements KeycloakConfigResolver {
+
+        private final AdapterConfig adapterConfig;
+        private KeycloakDeployment keycloakDeployment;
+
+        @Autowired
+        CustomKeycloakSpringBootConfigResolver(AdapterConfig adapterConfig) {
+            this.adapterConfig = adapterConfig;
+        }
+
+        @Override
+        public KeycloakDeployment resolve(HttpFacade.Request request) {
+            if (this.keycloakDeployment == null) {
+                this.keycloakDeployment = KeycloakDeploymentBuilder.build(this.adapterConfig);
+            }
+            return this.keycloakDeployment;
+        }
     }
 
     @Override
