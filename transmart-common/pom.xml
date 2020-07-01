@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.transmartproject</groupId>
 		<artifactId>transmart-lib</artifactId>
-		<version>0.0.7</version>
+		<version>0.0.9</version>
 		<relativePath>../</relativePath>
 	</parent>
 
@@ -63,9 +63,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.17.Final</version>
+			<version>6.0.18.Final</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -110,6 +110,18 @@
 							<dataFile>${project.build.directory}/test-results/coverage/jacoco/jacoco.exec</dataFile>
 							<outputDirectory>${project.build.directory}/test-results/coverage/jacoco</outputDirectory>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>${owasp-dependency-check.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
