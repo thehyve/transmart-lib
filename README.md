@@ -31,7 +31,7 @@ REST API.
 <dependency>
     <groupId>org.transmartproject</groupId>
     <artifactId>transmart-common</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 </dependency>
 ```
 
@@ -42,7 +42,7 @@ Proxy server controllers and client services.
 <dependency>
     <groupId>org.transmartproject</groupId>
     <artifactId>transmart-proxy</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 </dependency>
 ```
 
