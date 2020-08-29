@@ -1,0 +1,16 @@
+name: Workflow for Maven using Snyk 
+on:
+  pull_request:
+    branches:
+    - master
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/maven-3-jdk-11@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: test
