@@ -1,4 +1,4 @@
-name: Workflow for Maven using Snyk 
+name: Workflow for Maven using Snyk
 on:
   pull_request:
     branches:
@@ -14,3 +14,4 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         command: test
+        args: --all-projects --severity-threshold=high --fail-on=all
