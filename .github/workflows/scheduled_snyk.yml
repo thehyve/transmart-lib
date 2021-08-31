@@ -1,4 +1,4 @@
-name: Workflow for Maven using Snyk 
+name: Workflow for Maven using Snyk
 on:
   schedule:
   - cron: '0 2 * * 1'
@@ -15,7 +15,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         command: test
-        args: --json-file-output=${{ env.REPORT_FILE }}
+        args: --all-projects --severity-threshold=high --fail-on=all --json-file-output=${{ env.REPORT_FILE }}
     - name: Report new vulnerabilities
       uses: thehyve/report-vulnerability@master
       with:
